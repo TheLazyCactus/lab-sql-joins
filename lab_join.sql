@@ -30,7 +30,7 @@ GROUP BY store_id;
 
 SELECT
 c.name AS category,
-ROUND(AVG(f.length),0) AS avg_running_time
+ROUND(AVG(f.length),2) AS avg_running_time
 FROM
 	category c
 JOIN
@@ -41,7 +41,7 @@ GROUP BY c.name;
 
 SELECT
 c.name AS category,
-ROUND(AVG(f.length),0) AS avg_running_time
+ROUND(AVG(f.length),2) AS avg_running_time
 FROM
 	category c
 JOIN
@@ -66,16 +66,15 @@ LIMIT 10;
 SELECT
 f.title,
 s.store_id
-FROM film f
-JOIN inventory i ON f.film_id = i.film_id
-JOIN store s ON i.store_id = i.store_id
-WHERE f.title ='Academy Dinosaur'
-GROUP BY store_id;
+FROM inventory i
+JOIN store s ON i.store_id = s.store_id
+JOIN film f ON i.film_id = f.film_id
+WHERE f.title ='Academy Dinosaur' AND s.store_id =1;
 
 SELECT
 DISTINCT(f.title) AS film_title,
 CASE
-	WHEN IFNULL(COUNT(i.inventory_id),0) > 0 THEN 'Available'
+	WHEN COUNT(i.inventory_id) > 0 THEN 'Available'
     ELSE 'NOT Available'
 END AS availability
 FROM film f
